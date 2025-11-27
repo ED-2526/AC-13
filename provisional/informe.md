@@ -15,12 +15,12 @@ Estructura de les dades:
 	text: the text of the tweet (Lyx is cool)
 
 -	Teoricament hauriem d’estar treballant amb un dataset multiclass, però només hi ha 2 classes, 0 i 4, per tant és binari i com està equilibrat al 50% en aquestes dues classes és doncs, equilibrat.
-  ![Diagrama de flujo del sistema](img/imagen1.png)
- 	![Diagrama de flujo del sistema](img/imagen2.png)
+  ![Diagrama de flujo del sistema](provisional/imagen1.png)
+ 	![Diagrama de flujo del sistema](provisional/imagen2.png)
 -	Hem fet una comprovació i resulta que hi ha twits duplicats, haurem de netejar les dades. Teòricament hi ha 79,390 twits buits o duplicats
 
 •	Setup para el Cross validation.
-![Diagrama de flujo del sistema](img/imagen3.png)
+![Diagrama de flujo del sistema](provisional/imagen3.png)
 •	Y un starting point del proyecto.
 •	Tener controlados los datos. Si no tenemos claro que hay que hacer, contactar un tiempo antes al profesor que nos lleve el proyecto. Quieren que probemos varios códigos para comparar métodos.
 
