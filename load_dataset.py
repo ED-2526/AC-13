@@ -5,7 +5,7 @@ import pandas as pd
 #FUNCION PARWA CARGAR EL DATASET
 def load_dataset():
     # cambiar con la ruta donde tenemos el csv
-    path = r"C:\Users\simpl\Desktop\UNIVERSIDAD\cuarto\Aprenentatge Computacional (1er Semestre)\AC Projecte\2526\training.1600000.processed.noemoticon.csv"
+    path = r"training.1600000.processed.noemoticon.csv"
 
     cols = ["sentiment", "id", "date", "query", "user", "text"]
 

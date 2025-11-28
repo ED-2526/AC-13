@@ -13,12 +13,15 @@ def baseline_model(X_train, y_train, X_val, y_val):
         ("clf", LogisticRegression(max_iter=1000))
     ])
 
+    
+    #Training
     model.fit(X_train, y_train)
     preds = model.predict(X_val)
 
+    #Validation
     acc = accuracy_score(y_val, preds)
     print(f"Accuracy en validación: {acc:.4f}")
-
+    
     return model
 
 
@@ -26,4 +29,9 @@ if __name__ == "__main__":
     df = load_dataset()
     X_train, y_train, X_val, y_val, X_test, y_test = split_dataset(df)
 
-    baseline_model(X_train, y_train, X_val, y_val)
+    model = baseline_model(X_train, y_train, X_val, y_val)
+    
+    #Test por probar el model
+    preds_test = model.predict(X_test)
+    acc_test = accuracy_score(y_test, preds_test)
+    print(f"Accuracy en test: {acc_test:.4f}")
