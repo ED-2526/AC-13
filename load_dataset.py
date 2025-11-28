@@ -27,10 +27,10 @@ def analyze_dataset(df):
     print("\nPercentatge:")
     print(df['sentiment'].value_counts(normalize=True)) #contamos con valoraciones de o 0 o 4 (comentarlo para saber si debemos ampliar)
 
-    # ESTO CREO QUE NO ES REALMENTE NECESARIO
-    #print("\n===== SIZE DE LES REVIEWS =====") 
-    #df['text_len'] = df['text'].apply(len)
-    #print(df['text_len'].describe())
+    
+    print("\n===== SIZE DE LES REVIEWS =====") 
+    df['text_len'] = df['text'].apply(len)
+    print(df['text_len'].describe())
 
     print("\n===== Exemples =====")
     print(df.sample(5))
@@ -51,4 +51,5 @@ def analyze_dataset(df):
 if __name__ == "__main__":
     df = load_dataset()
     analyze_dataset(df)
+
 
