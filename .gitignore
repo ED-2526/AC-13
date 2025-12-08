@@ -1,6 +1,5 @@
 # .gitignore
 training.1600000.processed.noemoticon.csv
 notas.txt
-visu.py
 __pycache__/
 
