@@ -1,55 +1,63 @@
-#Script con el que cargaremos el dataset de twitter
+# Script para cargar y analizar el dataset
 import pandas as pd
+import os
 
+# --- Función para cargar el dataset ---
+def load_dataset(path):
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"No se encontró el archivo: {path}")
 
+<<<<<<< Updated upstream
 #FUNCION PARWA CARGAR EL DATASET
 def load_dataset():
     # cambiar con la ruta donde tenemos el csv
     path = r"Twitter_Data.csv"
+=======
+    print(f"Cargando dataset desde: {path}")
+>>>>>>> Stashed changes
 
-    cols = ["sentiment", "id", "date", "query", "user", "text"]
+    try:
+        df = pd.read_csv(path, encoding="utf-8", header=None)
+    except UnicodeDecodeError:
+        df = pd.read_csv(path, encoding="latin-1", header=None)
 
-    print(f"Cargando dataset desde: {path}") 
-    df = pd.read_csv(path, encoding="latin-1", names=cols)
+    # Asignamos nombres de columnas manualmente
+    df.columns = ["id", "topic", "sentiment", "text"]
 
     return df
 
-#FUNCION DE ANALISIS DEL DATASET - para situarnos en el problema, luego lo saco
+
+# --- Función de análisis ---
 def analyze_dataset(df):
-    print("\n===== TIPUS DE DATASET =====")
-    print(type(df))
+    print("\n===== COLUMNAS =====")
+    print(df.columns.tolist())
 
-    print("\n===== VARIABLES =====")
-    print(df.columns)
+    print("\n===== CLASES DE SENTIMIENTO =====")
+    print(df['sentiment'].value_counts(dropna=False))
+    print("\nProporción:")
+    print(df['sentiment'].value_counts(normalize=True, dropna=False))
 
-    print("\n===== CLASSES (sentiment) =====")
-    print(df['sentiment'].value_counts())
-    print("\nPercentatge:")
-    print(df['sentiment'].value_counts(normalize=True)) #contamos con valoraciones de o 0 o 4 (comentarlo para saber si debemos ampliar)
-
-    
-    print("\n===== SIZE DE LES REVIEWS =====") 
-    df['text_len'] = df['text'].apply(len)
+    print("\n===== LONGITUD DE TEXTO =====")
+    df['text_len'] = df['text'].astype(str).apply(len)
     print(df['text_len'].describe())
 
-    print("\n===== Exemples =====")
+    print("\n===== EJEMPLOS =====")
     print(df.sample(5))
 
-    #Es multiclass?
     n_clases = df['sentiment'].nunique()
-    print(f"\nNúmero de classes: {n_clases}")
-    if n_clases > 2:
-        print("Problema Multiclass")
-    else:
-        print("Problema Binari")
+    print(f"\nNúmero de clases: {n_clases}")
+    print("Multiclass" if n_clases > 2 else "Binario")
 
-    #Esta desbalanceado?
-    print("\nComprobació biaix:")
+    print("\n===== DISTRIBUCIÓN =====")
     print(df['sentiment'].value_counts(normalize=True))
 
 
+# --- Ejecución principal ---
 if __name__ == "__main__":
-    df = load_dataset()
+    path = r"C:\Users\simpl\Desktop\UNIVERSIDAD\cuarto\Aprenentatge Computacional (1er Semestre)\AC Projecte\2526\twitter_training.csv\twitter_training.csv"
+    df = load_dataset(path)
     analyze_dataset(df)
+
+
 
 
