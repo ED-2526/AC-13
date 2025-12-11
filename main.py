@@ -104,7 +104,7 @@ def main():
 
     print(f"\n🏆 MEJOR MODELO: {best_info} con AUC: {best_auc:.4f}")
 
-    # TUNEADO DE HIPERPARÁMETROS (Del ganador)
+    # 6. TUNEADO DE HIPERPARÁMETROS (Del ganador)
     print("\n--- TUNING DEL MEJOR MODELO ---")
     
     # Detectamos qué modelo ganó para configurar el grid
