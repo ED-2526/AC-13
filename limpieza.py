@@ -53,6 +53,6 @@ df_1 = load_and_clean_data(filepath)
 muestras = df_1.sample(5)
 
 for index, row in muestras.iterrows():
-    print("🔴 ORIGINAL: ", row['text'])
-    print("🟢 LIMPIO:   ", row['text_clean'])
+    print("ORIGINAL: ", row['text'])
+    print("LIMPIO:   ", row['text_clean'])
     print("-" * 80) 
