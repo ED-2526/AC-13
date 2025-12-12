@@ -17,3 +17,7 @@ TODO 12/12/25:
 * el que sea mejor que tenga mejor auc sera el que nos quedemos y tuneemos
 * hyperparametros: los que especifico antes de entrenar el modelo (ej: prof maxima), modificandolos cambio el comportamiento del modelo, cambiarlos hacer la comparativa de cual funciona mejor, y SABER EXPLICAR PORQUE FUNCIONA MEJOR!
 * Entrenamos el modelo en el dataset nuevo y testeamos en el antiguo, cogemos dos datasets distintos y vemos como se adapta al nuevo conjunto de datos. puede pasar que falten clases entonces clasificamos segun probabilidad.
+
+FALTA:
+* Entrenamos el modelo en el dataset nuevo y testeamos en el antiguo, cogemos dos datasets distintos y vemos como se adapta al nuevo conjunto de datos. puede pasar que falten clases entonces clasificamos segun probabilidad.
+* Coger todo el dataset y validar los modeloss para coger el mejor
