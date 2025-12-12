@@ -14,6 +14,8 @@ def load_and_clean_data(filepath):
     Carga el CSV, elimina irrelevantes, mapea etiquetas y limpia el texto.
     Retorna: DataFrame limpio ready para entrenar.
     """
+    
+    
     print("--- CARGANDO Y LIMPIANDO DATOS ---")
     
     # 1. Cargar

@@ -36,6 +36,40 @@ def _save_plot(title, xlabel, ylabel, filename, legend=True, tight_layout=True):
     plt.close()
     print(f"Gráfica guardada: {filename}")
 
+def plot_model_comparison(results, filename='model_comparison.png'):
+    """
+    Generates and saves a bar plot comparing model performance (AUC and Accuracy).
+    """
+    df = pd.DataFrame(results)
+    df['model_label'] = df['name'] + ' (' + df['vectorizer'] + ')'
+    df = df.sort_values(by='best_score', ascending=False)
+
+    plt.figure(figsize=(14, 10))  # Increased figure size for better readability
+    
+    # Melting the dataframe to plot 'best_score' and 'accuracy' side-by-side
+    melted_df = df.melt(id_vars='model_label', value_vars=['best_score', 'accuracy'],
+                          var_name='Metric', value_name='Score')
+    
+    ax = sns.barplot(x='Score', y='model_label', hue='Metric', data=melted_df, orient='h')
+
+    plt.xlabel('Score', fontsize=12)
+    plt.ylabel('Model', fontsize=12)
+    plt.title('Comparativa de Modelos (AUC y Accuracy)', fontsize=16)
+    plt.legend(title='Métrica', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
+    
+    # Add value labels to the bars
+    for p in ax.patches:
+        width = p.get_width()
+        plt.text(width + 0.01, p.get_y() + p.get_height() / 2,
+                 f'{width:.4f}',
+                 va='center')
+
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close()
+    print(f"Gráfica de comparación de modelos guardada en: {filename}")
+
 def plot_conf_matrix(estimator, X_test, y_test, prefix=''):
     """Generates and saves a confusion matrix."""
     y_pred = estimator.predict(X_test)

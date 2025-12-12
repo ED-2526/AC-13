@@ -57,7 +57,7 @@ def main():
     grids = {
         'Naive Bayes': {'clf__alpha': [0.1, 0.5, 1.0]},
         'LogReg': {'clf__estimator__C': [0.1, 1, 10]},
-        'SVM': {'clf__estimator__C': [0.1, 1, 10]},
+        'SVM': {'clf__estimator__C': [0.1, 1]},
         'Decision Tree': {'clf__max_depth': [10, 20, None]},
         'Random Forest': {'clf__n_estimators': [100, 200], 'clf__max_depth': [10, 20, None]},
         'XGBoost': {'clf__n_estimators': [100, 200], 'clf__max_depth': [3, 6]},
@@ -86,15 +86,12 @@ def main():
 
             n_jobs = -1 if m_name not in ['KNN', 'SVM'] else 1 # Algunos modelos son muy pesados
 
-            gcv = GridSearchCV(pipe, grid, cv=3, scoring='roc_auc_ovr_weighted', # cv=3 para agilizar
+            gcv = GridSearchCV(pipe, grid, cv=5, scoring='roc_auc_ovr_weighted', 
                                n_jobs=n_jobs, verbose=1, return_train_score=True)
             
             # Usar un subset para KNN para no agotar memoria
-            if m_name == 'KNN':
-                X_train_small, _, y_train_small, _ = train_test_split(X_train, y_train, train_size=0.2, random_state=42, stratify=y_train)
-                gcv.fit(X_train_small, y_train_small)
-            else:
-                gcv.fit(X_train, y_train)
+        
+            gcv.fit(X_train, y_train)
 
 
             best_estimator = gcv.best_estimator_
