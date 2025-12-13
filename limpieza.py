@@ -1,13 +1,35 @@
-
 import pandas as pd
 import re
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
+# Descargar recursos necesarios si no están (por seguridad)
+try:
+    nltk.data.find('corpora/stopwords')
+    nltk.data.find('corpora/wordnet')
+except LookupError:
+    nltk.download('stopwords')
+    nltk.download('wordnet')
 
 lemmatizer = WordNetLemmatizer()
 stop_words = set(stopwords.words('english'))
+
+def clean_text(text):
+    """
+    Función para limpiar una sola frase.
+    Se ha renombrado de '_clean_text_logic' a 'clean_text' 
+    para poder usarla desde otros scripts.
+    """
+    text = str(text).lower()
+    text = re.sub(r'http\S+|www\S+', '', text) # URLs
+    text = re.sub(r'\@\w+|\#', '', text)       # Menciones
+    text = re.sub(r'[^a-zA-Z]', ' ', text)     # Solo letras
+    
+    tokens = text.split()
+    # Lematización y Stopwords
+    filtered = [lemmatizer.lemmatize(w) for w in tokens if w not in stop_words]
+    return " ".join(filtered)
 
 def load_and_clean_data(filepath, balance=None):
     """
@@ -19,6 +41,7 @@ def load_and_clean_data(filepath, balance=None):
     
     # 1. Cargar
     col_names = ['id', 'entity', 'sentiment', 'text']
+    # header=None porque el dataset original no suele traer cabecera
     df = pd.read_csv(filepath, names=col_names, header=None)
     
     # 2. Filtrar nulos e Irrelevantes
@@ -28,12 +51,9 @@ def load_and_clean_data(filepath, balance=None):
     # 3. Mapeo a 0, 1, 2
     label_map = {'Negative': 0, 'Neutral': 1, 'Positive': 2}
     df['label'] = df['sentiment'].map(label_map)
+    
     if balance:
-        #4. añadimos recortar el dataset para que quede mas balanceado:
-        """Calcular cuántos tweets tiene la clase con menos datos.
-        Coger aleatoriamente esa misma cantidad de tweets de las 
-        otras clases. Juntarlo todo y mezclarlo."""
-        
+        # 4. Balanceo (Recortar dataset)
         counts = df['label'].value_counts()
         min_count = counts.min() # El número de la clase más pequeña
         
@@ -49,24 +69,12 @@ def load_and_clean_data(filepath, balance=None):
         df = df.sample(frac=1, random_state=42).reset_index(drop=True)
         
         print(f"Dataset balanceado: {len(df)} filas en total ({min_count} por clase).")
-        # -------------------------------------------------
-    # 5. Limpieza de texto (lema i stopwprd)
-    df['text_clean'] = df['text'].apply(_clean_text_logic)
+
+    # 5. Limpieza de texto (Usamos la función renombrada clean_text)
+    df['text_clean'] = df['text'].apply(clean_text)
     
     print(f"Datos procesados: {len(df)} filas.")
     return df
-
-def _clean_text_logic(text):
-    """Función interna para limpiar una sola frase"""
-    text = str(text).lower()
-    text = re.sub(r'http\S+|www\S+', '', text) # URLs
-    text = re.sub(r'\@\w+|\#', '', text)       # Menciones
-    text = re.sub(r'[^a-zA-Z]', ' ', text)     # Solo letras
-    
-    tokens = text.split()
-    # Lematización y Stopwords
-    filtered = [lemmatizer.lemmatize(w) for w in tokens if w not in stop_words]
-    return " ".join(filtered)
 
 if __name__ == "__main__":
     

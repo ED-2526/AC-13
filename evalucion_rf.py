@@ -12,6 +12,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import CountVectorizer
+
 
 def ensure_dir(d):
     if not os.path.exists(d):
@@ -35,7 +37,7 @@ def main():
     print(f"Entrenando modelo final con max_depth=250 y n_estimators=200...")
     
     final_pipeline = Pipeline([
-        ('vect', TfidfVectorizer(max_features=3000)),
+        ('vect', CountVectorizer(max_features=3000)),
         ('clf', RandomForestClassifier(
             n_estimators=200, 
             max_depth=250,    # <--- EL VALOR ÓPTIMO ENCONTRADO

@@ -11,6 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import validation_curve, train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import CountVectorizer
 
 def ensure_dir(d):
     if not os.path.exists(d):
@@ -63,7 +64,7 @@ def main():
     
     # 3Configurar el Pipeline 
     pipeline = Pipeline([
-        ('vect', TfidfVectorizer(max_features=3000)),
+        ('vect', CountVectorizer(max_features=3000)),
         ('clf', RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1))
     ])
 
