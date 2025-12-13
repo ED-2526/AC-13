@@ -30,7 +30,16 @@ def ensure_dir(d):
 
 def main():
     print('--- CARGANDO Y LIMPIANDO DATOS ---')
-    df = limpieza.load_and_clean_data('twitter_training.csv')
+    
+    balance = input("BALANCEADO: (s/n): ")
+    if balance.lower() == 's':
+        df = limpieza.load_and_clean_data('twitter_training.csv', balance=True)
+        directorio = 'results_hiperparams_balanceado'
+    else:
+        df = limpieza.load_and_clean_data('twitter_training.csv')
+        directorio = 'results_hiperparams'
+    
+    ensure_dir(directorio)
 
     X_train, X_test, y_train, y_test = train_test_split(
         df['text_clean'], df['label'], test_size=0.2, random_state=42, stratify=df['label']
@@ -66,7 +75,7 @@ def main():
         'KNN': {'clf__n_neighbors': [3, 5, 7]}
     }
 
-    ensure_dir('results_hiperparams')
+    ensure_dir(directorio)
     best_models_results = []
     
     print('--- INICIANDO BÚSQUEDA DE HIPERPARÁMETROS ---')
@@ -81,7 +90,7 @@ def main():
                 print(f"No se encontró grid para {m_name}, saltando.")
                 continue
 
-            out_dir = f'results_hiperparams/{m_name}_{v_name}'
+            out_dir = f'{directorio}/{m_name}_{v_name}'
             ensure_dir(out_dir)
 
             n_jobs = -1 if m_name not in ['KNN', 'SVM'] else 1 # Algunos modelos son muy pesados
@@ -142,15 +151,15 @@ def main():
     best_models_results.sort(key=lambda x: x['best_score'], reverse=True)
     
     # Crear carpeta para imágenes si no existe
-    ensure_dir('imagenes')
+    ensure_dir(directorio)
 
    
     visu.plot_comparison_roc(best_models_results, X_test, y_test, classes, 
-                             filename='imagenes/comparativa_roc_mejores_modelos.png', 
+                             filename=f'{directorio}/comparativa_roc_mejores_modelos.png', 
                              average='micro')
     
     visu.plot_comparison_pr(best_models_results, X_test, y_test, classes, 
-                            filename='imagenes/comparativa_pr_mejores_modelos.png', 
+                            filename=f'{directorio}/comparativa_pr_mejores_modelos.png', 
                             average='micro')
     
 
@@ -159,9 +168,9 @@ def main():
     for res in best_models_results:
         print(f"  - Modelo: {res['name']} ({res['vectorizer']}) -> AUC: {res['best_score']:.4f}")
         print(f"    Mejores Parámetros: {res['best_params']}")
-        print(f"    Archivos guardados en: results_hiperparams/{res['name']}_{res['vectorizer']}/")
+        print(f"    Archivos guardados en: {directorio}/{res['name']}_{res['vectorizer']}/")
 
-    print("\nGráficos comparativos guardados en la carpeta 'imagenes/'.")
+    print(f"\nGráficos comparativos guardados en la carpeta '{directorio}/'.")
 
 
 if __name__ == '__main__':

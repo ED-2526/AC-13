@@ -5,3 +5,5 @@ __pycache__/
 
 # Resultados de experimentos y modelos generados
 results_hiperparams/
+results_hiperparams_balanceado/
+*.pkl
