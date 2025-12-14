@@ -1,5 +1,5 @@
 from sklearn.model_selection import KFold,  StratifiedKFold
-from load_dataset import load_dataset
+from deprecated.load_dataset import load_dataset
 
 def prepare_cross_validation(X, y):
     print("Configurando 5-fold cross validation...\n")

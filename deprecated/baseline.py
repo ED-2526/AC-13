@@ -2,7 +2,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
-from load_dataset import load_dataset
+from deprecated.load_dataset import load_dataset
 from split_data import split_dataset
 
 def baseline_model(X_train, y_train, X_val, y_val):
