@@ -1,6 +1,6 @@
 # .gitignore
 training.1600000.processed.noemoticon.csv
-notas.txt
+
 __pycache__/
 
 # Resultados de experimentos y modelos generados
