@@ -8,7 +8,7 @@ from collections import Counter
 from sklearn.feature_extraction.text import CountVectorizer
 from wordcloud import WordCloud
 import os
-import scripts.fase_2.limpieza as limpieza # Tu script de limpieza
+import limpieza # Tu script de limpieza
 
 def main():
     print("--- 📂 ANÁLISIS MASTER: HÍBRIDO + CARPETA ORGANIZADA 📂 ---")
@@ -16,7 +16,7 @@ def main():
     # ==============================================================================
     # 0. CREAR CARPETA DE SALIDA
     # ==============================================================================
-    folder_name = 'results\Fase_2_hibrido\analisis_hibrido'
+    folder_name = "results\Fase_2_hibrido\hibrido_analisis"
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
         print(f"\n[0/6] ✅ Carpeta creada: '{folder_name}/'")
@@ -29,20 +29,20 @@ def main():
     print("\n[1/6] Cargando y fusionando datasets...")
     try:
         # A) ORIGINAL (Sin Irrelevant)
-        df_orig_raw = pd.read_csv('twitter_training.csv', header=None, names=['id', 'entity', 'sentiment', 'text'])
+        df_orig_raw = pd.read_csv('data/twitter_training.csv', header=None, names=['id', 'entity', 'sentiment', 'text'])
         df_orig = df_orig_raw[df_orig_raw['sentiment'] != 'Irrelevant'].copy()
         df_orig['label'] = df_orig['sentiment'].map({'Negative': 0, 'Neutral': 1, 'Positive': 2})
         df_orig['text_clean'] = df_orig['text'].astype(str).apply(limpieza.clean_text)
         df_orig['Origen'] = 'Juegos (Original)'
         
         # B) AEROLÍNEAS
-        df_air = pd.read_csv('Tweets_aerolinea.csv')
+        df_air = pd.read_csv('data/Tweets_aerolinea.csv')
         df_air['label'] = df_air['airline_sentiment'].map({'negative': 0, 'neutral': 1, 'positive': 2})
         df_air['text_clean'] = df_air['text'].astype(str).apply(limpieza.clean_text)
         df_air['Origen'] = 'Aerolíneas'
         
         # C) VIDA COTIDIANA
-        df_life = pd.read_json('validation.json')
+        df_life = pd.read_json('data/validation.json')
         df_life['label'] = df_life['label'].str.lower().map({'negative': 0, 'neutral': 1, 'positive': 2})
         df_life['text_clean'] = df_life['text'].astype(str).apply(limpieza.clean_text)
         df_life['Origen'] = 'Vida Cotidiana'
@@ -133,7 +133,7 @@ def main():
     plt.plot(cumulative_percentage, color='blue', linewidth=2)
     
     # Dibujamos línea en 5000 (tu max_features)
-    limit = 5000
+    limit = 8000
     coverage = cumulative_percentage[limit] if limit < len(cumulative_percentage) else 1.0
     
     plt.axvline(x=limit, color='red', linestyle='--', label=f'Corte en 5,000 palabras')

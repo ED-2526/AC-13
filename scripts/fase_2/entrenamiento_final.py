@@ -14,6 +14,7 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 from sklearn.preprocessing import label_binarize
 import limpieza
 from itertools import cycle
+import data_loader
 def main():
     print("--- 🚀 ENTRENAMIENTO FINAL (DOMINIOS + ROC + PR + FEATURES) 🚀 ---")
     
@@ -29,78 +30,36 @@ def main():
 
     # ==============================================================================
     # 1. CARGA Y SPLIT INDIVIDUAL
-    # ==============================================================================
-    print("\n[1/8] Cargando datos desde 'data/'...")
-
-    # A) ORIGINAL (Juegos)
-    try:
-        df_base_raw = pd.read_csv('data/twitter_training.csv', header=None, names=['id', 'entity', 'sentiment', 'text'])
-        df_base = df_base_raw[df_base_raw['sentiment'] != 'Irrelevant'].copy()
-        df_base['label'] = df_base['sentiment'].map({'Negative': 0, 'Neutral': 1, 'Positive': 2})
-        df_base['text_clean'] = df_base['text'].astype(str).apply(limpieza.clean_text)
-        df_base = df_base.dropna()
-        
-        X_train_base, X_test_base, y_train_base, y_test_base = train_test_split(
-            df_base['text_clean'], df_base['label'], test_size=0.2, random_state=42, stratify=df_base['label']
-        )
-    except Exception as e:
-        print(f"❌ Error cargando Juegos: {e}")
-        return
-
-    # B) AEROLÍNEAS
-    try:
-        df_air = pd.read_csv('data/Tweets_aerolinea.csv')
-        df_air['label'] = df_air['airline_sentiment'].map({'negative': 0, 'neutral': 1, 'positive': 2})
-        df_air['text_clean'] = df_air['text'].astype(str).apply(limpieza.clean_text)
-        df_air = df_air[['text_clean', 'label']].dropna()
-        
-        X_train_air, X_test_air, y_train_air, y_test_air = train_test_split(
-            df_air['text_clean'], df_air['label'], test_size=0.2, random_state=42, stratify=df_air['label']
-        )
-    except Exception as e:
-        print(f"❌ Error cargando Aerolíneas: {e}")
-        return
-
-    # C) VIDA COTIDIANA
-    try:
-        df_life = pd.read_json('data/validation.json')
-        df_life['label'] = df_life['label'].str.lower().map({'negative': 0, 'neutral': 1, 'positive': 2})
-        df_life['text_clean'] = df_life['text'].astype(str).apply(limpieza.clean_text)
-        df_life = df_life[['text_clean', 'label']].dropna()
-        
-        X_train_life, X_test_life, y_train_life, y_test_life = train_test_split(
-            df_life['text_clean'], df_life['label'], test_size=0.2, random_state=42, stratify=df_life['label']
-        )
-    except Exception as e:
-        print(f"❌ Error cargando Vida Cotidiana: {e}")
-        return
-
-    # ==============================================================================
-    # 2. FUSIÓN DE TRAINS
-    # ==============================================================================
-    print("\n[2/8] Fusionando datasets de entrenamiento...")
+ # 1. CARGA Y FUSIÓN (Paso 1)
+    df_total = data_loader.load_and_merge_data(
+        sample_frac=1.0, data_folder_path='data'
+    )
     
-    X_train_total = pd.concat([X_train_base, X_train_air, X_train_life])
-    y_train_total = pd.concat([y_train_base, y_train_air, y_train_life])
-    
-    train_indices = np.random.permutation(len(X_train_total))
-    X_train_total = X_train_total.iloc[train_indices]
-    y_train_total = y_train_total.iloc[train_indices]
-    
-    print(f"   -> Entrenando con {len(X_train_total)} tweets.")
+    if df_total.empty:
+        return
+        
+    # 2. SPLIT INDIVIDUALIZADO (Paso 2: Reserva 20% de cada uno)
+    X_train_total, X_test_global, y_train_total, y_test_global, df_test_completo = data_loader.split_by_domain(
+        df_total, test_size=0.2, random_state=42
+    )
 
+    if X_train_total is None:
+        return
+    
     # ==============================================================================
     # 3. ENTRENAMIENTO (MODELO FINAL BALANCEADO)
     # ==============================================================================
     print("\n[3/8] Entrenando Random Forest (Balanced + Depth None)...")
     
     pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(max_features=5000)),
+        ('tfidf', TfidfVectorizer(max_features=8000)),
         ('clf', RandomForestClassifier(
             n_estimators=200, 
             max_depth=None, 
             class_weight='balanced', 
             random_state=42, 
+            min_samples_leaf=1,
+            min_samples_split=2,
             n_jobs=-1
         ))
     ])
@@ -109,13 +68,27 @@ def main():
     
     # Guardar modelo
     if not os.path.exists('models'): os.makedirs('models')
-    joblib.dump(pipeline, 'models/modelo_final_balanced.pkl')
+    joblib.dump(pipeline, 'models/modelo_final_balanced.pkl', compress=3)
     print(f"   -> 💾 Modelo guardado en models/")
 
     # ==============================================================================
     # 4. GRÁFICA DE RENDIMIENTO POR DOMINIO
     # ==============================================================================
     print("\n[4/8] Evaluando acierto por cada dominio...")
+    # JUEGOS (Base)
+    df_test_base = df_test_completo[df_test_completo['domain'] == 'Juegos']
+    X_test_base = df_test_base['text_clean']
+    y_test_base = df_test_base['label']
+    
+    # AEROLÍNEAS (Air)
+    df_test_air = df_test_completo[df_test_completo['domain'] == 'Aerolineas']
+    X_test_air = df_test_air['text_clean']
+    y_test_air = df_test_air['label']
+    
+    # VIDA COTIDIANA (Life)
+    df_test_life = df_test_completo[df_test_completo['domain'] == 'Vida']
+    X_test_life = df_test_life['text_clean']
+    y_test_life = df_test_life['label']
     
     acc_base = accuracy_score(y_test_base, pipeline.predict(X_test_base))
     acc_air = accuracy_score(y_test_air, pipeline.predict(X_test_air))
