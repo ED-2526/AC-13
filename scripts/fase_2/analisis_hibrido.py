@@ -8,7 +8,7 @@ from collections import Counter
 from sklearn.feature_extraction.text import CountVectorizer
 from wordcloud import WordCloud
 import os
-import limpieza # Tu script de limpieza
+import scripts.fase_2.limpieza as limpieza # Tu script de limpieza
 
 def main():
     print("--- 📂 ANÁLISIS MASTER: HÍBRIDO + CARPETA ORGANIZADA 📂 ---")
@@ -16,7 +16,7 @@ def main():
     # ==============================================================================
     # 0. CREAR CARPETA DE SALIDA
     # ==============================================================================
-    folder_name = 'analisis_hibrido'
+    folder_name = 'results\Fase_2_hibrido\analisis_hibrido'
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
         print(f"\n[0/6] ✅ Carpeta creada: '{folder_name}/'")

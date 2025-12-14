@@ -1,6 +1,6 @@
 import os
-import limpieza
-import visu
+import scripts.fase_2.limpieza as limpieza
+import scripts.fase_2.visu as visu
 import joblib
 import pandas as pd
 

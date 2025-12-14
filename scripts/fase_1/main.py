@@ -14,8 +14,8 @@ from sklearn.calibration import CalibratedClassifierCV
 import xgboost as xgb
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.multiclass import OneVsRestClassifier
-import limpieza
-import visu
+import scripts.fase_2.limpieza as limpieza
+import scripts.fase_2.visu as visu
 
 def main():
     # --- CARGA Y PREPARACIÓN DE DATOS ---

@@ -12,8 +12,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, roc_curve, auc, precision_recall_curve, average_precision_score
 from sklearn.preprocessing import label_binarize
-import limpieza
 from itertools import cycle
+import limpieza
 def main():
     print("--- 🚀 ENTRENAMIENTO FINAL (DOMINIOS + ROC + PR + FEATURES) 🚀 ---")
     
@@ -108,9 +108,9 @@ def main():
     pipeline.fit(X_train_total, y_train_total)
     
     # Guardar modelo
-    if not os.path.exists('models'): os.makedirs('models')
-    joblib.dump(pipeline, 'models/modelo_final_balanced.pkl')
-    print(f"   -> 💾 Modelo guardado en models/")
+    if not os.path.exists('../models'): os.makedirs('../models')
+    joblib.dump(pipeline, '../models/modelo_final_balanced.pkl')
+    print(f"   -> 💾 Modelo guardado en ../models/")
 
     # ==============================================================================
     # 4. GRÁFICA DE RENDIMIENTO POR DOMINIO

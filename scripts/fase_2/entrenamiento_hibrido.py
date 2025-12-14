@@ -1,5 +1,5 @@
 import pandas as pd
-import limpieza
+import scripts.fase_2.limpieza as limpieza
 import joblib
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer

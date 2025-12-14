@@ -1,5 +1,5 @@
 import pandas as pd
-import limpieza
+import scripts.fase_2.limpieza as limpieza
 import joblib
 import matplotlib
 matplotlib.use('Agg')

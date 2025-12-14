@@ -1,6 +1,6 @@
 import pandas as pd
-import limpieza
-import visu
+import scripts.fase_2.limpieza as limpieza
+import scripts.fase_2.visu as visu
 import joblib
 import matplotlib
 matplotlib.use('Agg') # Backend para evitar errores de ventana

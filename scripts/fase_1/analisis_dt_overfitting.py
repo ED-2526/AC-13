@@ -4,7 +4,7 @@ matplotlib.use('Agg') # Backend sin ventana
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import limpieza
+import scripts.fase_2.limpieza as limpieza
 import os
 
 # Importamos CountVectorizer para BoW
