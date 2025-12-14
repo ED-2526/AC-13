@@ -60,11 +60,11 @@ def main():
     
     pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(max_features=5000)),
-        ('clf', RandomForestClassifier(n_estimators=200, max_depth=600, random_state=42, n_jobs=-1))
+        ('clf', RandomForestClassifier(n_estimators=200, max_depth=600, class_weight='balanced', random_state=42, n_jobs=-1))
     ])
     
     pipeline.fit(df_train_total['text_clean'], df_train_total['label'])
-    joblib.dump(pipeline, 'modelo_final_pro.pkl')
+    joblib.dump(pipeline, 'modelo_final_rfb.pkl')
     print("   -> 💾 Modelo guardado.")
 
     # ==============================================================================
