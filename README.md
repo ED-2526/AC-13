@@ -21,3 +21,6 @@ TODO 12/12/25:
 FALTA:
 * Entrenamos el modelo en el dataset nuevo y testeamos en el antiguo, cogemos dos datasets distintos y vemos como se adapta al nuevo conjunto de datos. puede pasar que falten clases entonces clasificamos segun probabilidad.
 * Coger todo el dataset y validar los modeloss para coger el mejor
+  
+TODO 10/1/26:
+* ampliar la parte de ver como cae la accuracy en función del número de palabras. Ver las caidas de accuracy segun diferentes cosas
