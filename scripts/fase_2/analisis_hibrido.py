@@ -136,7 +136,7 @@ def main():
     limit = 8000
     coverage = cumulative_percentage[limit] if limit < len(cumulative_percentage) else 1.0
     
-    plt.axvline(x=limit, color='red', linestyle='--', label=f'Corte en 5,000 palabras')
+    plt.axvline(x=limit, color='red', linestyle='--', label=f'Corte en 8,000 palabras')
     plt.axhline(y=coverage, color='green', linestyle=':', label=f'Cobertura: {coverage:.1%}')
     
     plt.title('Curva de Cobertura del Vocabulario (Ley de Zipf)')
@@ -148,7 +148,7 @@ def main():
     
     plt.tight_layout()
     plt.savefig(os.path.join(folder_name, '4_cobertura_vocabulario.png'))
-    print(f"   -> (NUEVO) 📈 Curva guardada. Demuestra que 5000 palabras cubren el {coverage:.1%} del texto.")
+    print(f"   -> (NUEVO) 📈 Curva guardada. Demuestra que 8000 palabras cubren el {coverage:.1%} del texto.")
 
     # ==============================================================================
     # 5. BIGRAMAS POR SENTIMIENTO (Contexto)
