@@ -1,0 +1,1 @@
+Esta carpeta contiene toda la primera versión del proyecto y lo que ya no usamos. O sea lo deprecated o descartado

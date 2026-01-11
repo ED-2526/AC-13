@@ -1,0 +1,13 @@
+Modelo: Decision Tree (BoW)
+Hiperparámetros: max_depth=70
+Accuracy Final: 0.8052
+
+              precision    recall  f1-score   support
+
+           0       0.73      0.89      0.80      4472
+           1       0.86      0.76      0.81      3622
+           2       0.87      0.75      0.81      4131
+
+    accuracy                           0.81     12225
+   macro avg       0.82      0.80      0.81     12225
+weighted avg       0.82      0.81      0.81     12225

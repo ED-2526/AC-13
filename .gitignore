@@ -1,0 +1,9 @@
+# .gitignore
+training.1600000.processed.noemoticon.csv
+
+__pycache__/
+
+# Resultados de experimentos y modelos generados
+results_hiperparams/
+results_hiperparams_balanceado/
+*.pkl
